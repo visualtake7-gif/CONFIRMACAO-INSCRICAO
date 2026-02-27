@@ -39,7 +39,6 @@ body{
   overflow:hidden;
 }
 
-/* faixa superior estilo credencial */
 .container::before{
   content:"";
   position:absolute;
@@ -97,7 +96,6 @@ h2{
   box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-/* caixa de status */
 #resultado{
   margin-top:12px;
   padding:14px 14px;
@@ -116,8 +114,6 @@ h2{
     0 6px 18px rgba(0,0,0,.12);
   transition:all .25s ease;
 }
-
-/* estados */
 
 .sucesso{
   background:linear-gradient(135deg,#16a34a,#22c55e) !important;
@@ -161,6 +157,9 @@ h2{
 
 </div>
 
+<!-- som de confirmação -->
+<audio id="beep" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
 <script>
 
 const reader = new Html5Qrcode("reader");
@@ -180,10 +179,17 @@ reader.start(
     if(jaLeu) return;
 
     jaLeu = true;
-
     validar(textoLido);
+
   }
-);
+).catch(err => {
+
+  const resultado = document.getElementById("resultado");
+  resultado.className = "erro";
+  resultado.innerText = "Não foi possível acessar a câmera";
+
+  console.error(err);
+});
 
 function validar(texto){
 
@@ -201,13 +207,16 @@ function validar(texto){
     .then(resposta => {
 
       resultado.className = "";
-      resultado.id = "resultado";
       resultado.innerText = resposta;
 
       const txt = resposta.toLowerCase();
 
       if(txt.includes("sucesso") || txt.includes("confirmada")){
         resultado.classList.add("sucesso");
+
+        document.getElementById("beep").play().catch(()=>{});
+
+        reader.stop().catch(()=>{});
       }
       else if(txt.includes("já")){
         resultado.classList.add("aviso");
@@ -222,11 +231,12 @@ function validar(texto){
 
     })
     .catch(() => {
+
       resultado.className = "";
-      resultado.id = "resultado";
       resultado.innerText = "Erro ao validar inscrição";
       resultado.classList.add("erro");
       jaLeu = false;
+
     });
 }
 
