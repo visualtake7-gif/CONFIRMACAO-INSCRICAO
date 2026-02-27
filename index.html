@@ -240,7 +240,11 @@ function validar(texto){
 
       resultado.innerText = resposta;
 
-      if(txt.includes("sucesso") || txt.includes("confirmada")){
+      if(
+  txt.includes("sucesso") ||
+  txt.includes("confirmada") ||
+  txt.includes("confirmado")
+){
         resultado.classList.add("sucesso");
         document.getElementById("beep").play().catch(()=>{});
         reader.stop().catch(()=>{});
