@@ -26,7 +26,7 @@ body{
 
 .container{
   width:100%;
-  max-width:420px;
+  max-width:620px;
   background:linear-gradient(180deg,#ffffff,#f3f7f5);
   color:#0f172a;
   border-radius:22px;
@@ -161,7 +161,6 @@ h2{
 <audio id="beep" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
 <script>
-
 const reader = new Html5Qrcode("reader");
 
 const webAppURL = "https://script.google.com/macros/s/AKfycbxM0yPVLY6et5SliwIs91RO081zgR7UM4duCsRdTg3G6FLlIVMDmQ-4ws7vgJpvLWsj/exec";
@@ -207,15 +206,43 @@ function validar(texto){
     .then(resposta => {
 
       resultado.className = "";
-      resultado.innerText = resposta;
 
-      const txt = resposta.toLowerCase();
+      let txt = resposta.toLowerCase();
+
+      // tenta interpretar como JSON
+      try {
+
+        const dados = JSON.parse(resposta);
+
+        resultado.innerHTML = `
+          <div style="text-align:left; line-height:1.5">
+            <strong>Nome:</strong> ${dados.nome || "-"}<br>
+            <strong>Telefone:</strong> ${dados.telefone || "-"}<br>
+            <strong>E-mail:</strong> ${dados.email || "-"}<br>
+            <strong>Congregação:</strong> ${dados.congregacao || "-"}<br>
+            <strong>Grupo:</strong> ${dados.grupo || "-"}
+          </div>
+        `;
+
+        resultado.classList.add("sucesso");
+        document.getElementById("beep").play().catch(()=>{});
+        reader.stop().catch(()=>{});
+
+        setTimeout(() => {
+          jaLeu = false;
+        }, 3000);
+
+        return;
+
+      } catch (e) {
+        // não é JSON, continua normal
+      }
+
+      resultado.innerText = resposta;
 
       if(txt.includes("sucesso") || txt.includes("confirmada")){
         resultado.classList.add("sucesso");
-
         document.getElementById("beep").play().catch(()=>{});
-
         reader.stop().catch(()=>{});
       }
       else if(txt.includes("já")){
@@ -238,8 +265,8 @@ function validar(texto){
       jaLeu = false;
 
     });
-}
 
+}
 </script>
 
 </body>
