@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Leitor de QR - Confirmação de Inscrição</title>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f3f3f3;
+  text-align:center;
+  padding:20px;
+}
+
+#reader{
+  width:300px;
+  margin:auto;
+}
+
+#resultado{
+  margin-top:20px;
+  font-size:20px;
+  font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<h2>Leitor de QR Code</h2>
+
+<div id="reader"></div>
+<div id="resultado"></div>
+
+<script>
+
+const reader = new Html5Qrcode("reader");
+
+const webAppURL = "https://script.google.com/macros/s/AKfycbx0rCnk6OHo2QpUe2ZZXmLwy3Fw8cbx5F4C-4oQ5jYClVdLhvjwmjsg4kdlhz7tLeX10w/exec"; 
+// exemplo:
+// https://script.google.com/macros/s/AKfycbxxxxxxxx/exec
+
+let jaLeu = false;
+
+reader.start(
+  { facingMode: "environment" },
+  {
+    fps: 10,
+    qrbox: 250
+  },
+  (textoLido) => {
+
+    if(jaLeu) return;
+
+    jaLeu = true;
+
+    validar(textoLido);
+  }
+);
+
+function validar(texto){
+
+  const resultado = document.getElementById("resultado");
+
+  let id = texto;
+
+  // se o QR vier como link, extrai o id
+  if(texto.includes("?id=")){
+    const url = new URL(texto);
+    id = url.searchParams.get("id");
+  }
+
+  fetch(webAppURL + "?id=" + encodeURIComponent(id))
+    .then(r => r.text())
+    .then(resposta => {
+
+      resultado.innerText = resposta;
+
+      setTimeout(() => {
+        jaLeu = false;
+      }, 2500);
+
+    })
+    .catch(() => {
+      resultado.innerText = "Erro ao validar inscrição";
+      jaLeu = false;
+    });
+}
+
+</script>
+
+</body>
+</html>
