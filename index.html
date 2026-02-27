@@ -9,20 +9,50 @@
 <style>
 body{
   font-family: Arial, sans-serif;
-  background:#f3f3f3;
+  background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
   text-align:center;
   padding:20px;
+  min-height:100vh;
+  color:#fff;
+}
+
+h2{
+  margin-bottom:15px;
 }
 
 #reader{
   width:300px;
-  margin:auto;
+  margin:20px auto;
+  border-radius:12px;
+  overflow:hidden;
+  border:4px solid #ffffff;
+  background:#fff;
 }
 
 #resultado{
   margin-top:20px;
-  font-size:20px;
+  font-size:22px;
   font-weight:bold;
+  padding:12px;
+  border-radius:10px;
+  background:#ffffff;
+  color:#111;
+}
+
+/* cores de status */
+.sucesso{
+  background:#16a34a !important;
+  color:#fff !important;
+}
+
+.aviso{
+  background:#f59e0b !important;
+  color:#fff !important;
+}
+
+.erro{
+  background:#dc2626 !important;
+  color:#fff !important;
 }
 </style>
 </head>
@@ -91,4 +121,5 @@ function validar(texto){
 </script>
 
 </body>
+
 </html>
