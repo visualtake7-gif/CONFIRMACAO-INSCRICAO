@@ -217,14 +217,15 @@ function validar(texto){
         const dados = JSON.parse(resposta);
 
         resultado.innerHTML = `
-          <div style="text-align:left; line-height:1.5">
-            <strong>Nome:</strong> ${dados.nome || "-"}<br>
-            <strong>Telefone:</strong> ${dados.telefone || "-"}<br>
-            <strong>E-mail:</strong> ${dados.email || "-"}<br>
-            <strong>Congregação:</strong> ${dados.congregacao || "-"}<br>
-            <strong>Grupo:</strong> ${dados.grupo || "-"}
-          </div>
-        `;
+        <div style="text-align:left; line-height:1.5">
+          <strong>Nome:</strong> ${dados.nome || "-"}<br>
+          <strong>Status:</strong> ${dados.status || "-"}<br>
+          <strong>Telefone:</strong> ${dados.telefone || "-"}<br>
+          <strong>E-mail:</strong> ${dados.email || "-"}<br>
+          <strong>Congregação:</strong> ${dados.congregacao || "-"}<br>
+          <strong>Grupo:</strong> ${dados.grupo || "-"}
+        </div>
+      `;
 
         resultado.classList.add("sucesso");
         document.getElementById("beep").play().catch(()=>{});
